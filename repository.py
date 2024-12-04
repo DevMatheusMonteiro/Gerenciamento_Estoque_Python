@@ -13,7 +13,7 @@ def buscarPorDescricao(descricao):
 def ordenarPorQuantidade(produtos, decrescente=False):
     return sorted(produtos,key=lambda produto:produto["quantidade"],reverse=decrescente)
 def filtrarPorLimiteDeQuantidade(quantidade=100):
-    return list(filter(lambda produto:produto["quantidade"])<=quantidade)
+    return list(filter(lambda produto:produto["quantidade"])<quantidade)
 def remover(produto):
     estoque_lista.remove(produto)
 def aumentarQuantidade(produto):
