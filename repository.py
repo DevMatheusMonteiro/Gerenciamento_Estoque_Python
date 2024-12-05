@@ -7,7 +7,7 @@ def criar(produto):
 def listar():
     return estoque_lista
 def buscarPorCodigo(codigo):
-    return next((produto for produto in estoque_lista if produto["codigo"] == codigo))
+    return next((produto for produto in estoque_lista if produto["codigo"] == codigo), None)
 def buscarPorDescricao(descricao):
     return list(filter(lambda produto:produto["descricao"].find(descricao)!=-1,estoque_lista))
 def ordenarPorQuantidade(produtos, decrescente=False):
