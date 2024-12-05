@@ -1,7 +1,17 @@
 def lerCSV(string):
     return [linha for linha in string.split("#")]
 def criarListaEstoque(linhas):
-    return [{"descricao": produto.split(";")[0], "codigo": produto.split(";")[1], "quantidade": produto.split(";")[2], "custoItem": produto.split(";")[3],"precoVenda": produto.split(";")[4]} for produto in linhas]
-def exibirProdutos(estoque):
-    for produto in estoque:
-        print(f"Código: {produto["codigo"]}\nDescrição: {produto["descricao"]}\nQuantidade: {produto["quantidade"]}\nCusto do Item: {produto["custoItem"]}\nPreço de Venda: {produto["precoVenda"]}\n************")
+    return [{"descricao": produto.split(";")[0], "codigo": int(produto.split(";")[1]), "quantidade": int(produto.split(";")[2]), "custoItem": float(produto.split(";")[3]),"precoVenda": float(produto.split(";")[4])} for produto in linhas]
+def entrarNumero(mensagem):
+    while True:
+        try:
+            numero = float(input(mensagem))
+            return numero
+        except ValueError:
+            print("Erro: número inválido!")
+def entrarTexto(mensagem):
+    while True:
+        texto = input(mensagem)
+        if not (texto == None or texto.strip() == ""):
+            return texto
+        print("Erro: texto nulo ou vazio!")

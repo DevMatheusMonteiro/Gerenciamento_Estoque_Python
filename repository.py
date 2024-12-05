@@ -7,13 +7,13 @@ def criar(produto):
 def listar():
     return estoque_lista
 def buscarPorCodigo(codigo):
-    return next((produto for produto in estoque_lista if produto["codigo"] == codigo))
+    return next((produto for produto in estoque_lista if produto["codigo"] == codigo), None)
 def buscarPorDescricao(descricao):
     return list(filter(lambda produto:produto["descricao"].find(descricao)!=-1,estoque_lista))
 def ordenarPorQuantidade(produtos, decrescente=False):
     return sorted(produtos,key=lambda produto:produto["quantidade"],reverse=decrescente)
 def filtrarPorLimiteDeQuantidade(quantidade=100):
-    return list(filter(lambda produto:produto["quantidade"])<=quantidade)
+    return list(filter(lambda produto:produto["quantidade"])<quantidade)
 def remover(produto):
     estoque_lista.remove(produto)
 def aumentarQuantidade(produto):
