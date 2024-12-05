@@ -32,6 +32,17 @@ def criar():
     precoVenda = entrarPrecoVenda(custoItem)
     produto = {"descricao": descricao, "codigo": codigo, "quantidade": quantidade, "custoItem": custoItem, "precoVenda": precoVenda}
     repository.criar(produto)
-def exibirProdutos():
-    for produto in repository.listar():
-        print(f"Código: {produto["codigo"]}\nDescrição: {produto["descricao"]}\nQuantidade: {produto["quantidade"]}\nCusto do Item: {produto["custoItem"]}\nPreço de Venda: {produto["precoVenda"]}\n************")
+def buscarPorDescricao(descricao):
+    relatorioGeral(repository.buscarPorDescricao(descricao))
+def filtrarPorLimiteDeQuantidade(quantidade=100):
+    relatorioGeral(repository.filtrarPorLimiteDeQuantidade(quantidade))
+def relatorioGeral(produtos):
+        if not produtos:
+            return print("Nenhum produto encontrado!")
+        for i,produto in enumerate(produtos):
+            if i == (len(produtos)-1):
+                print(f"Código: {produto["codigo"]}\nDescrição: {produto["descricao"]}\nQuantidade: {produto["quantidade"]}\nCusto do Item: {produto["custoItem"]}\nPreço de Venda: {produto["precoVenda"]}\nValor Total: {produto["precoVenda"] * produto["quantidade"]}")
+            else:
+                print(f"Código: {produto["codigo"]}\nDescrição: {produto["descricao"]}\nQuantidade: {produto["quantidade"]}\nCusto do Item: {produto["custoItem"]}\nPreço de Venda: {produto["precoVenda"]}\nValor Total: {produto["precoVenda"] * produto["quantidade"]}\n************")
+def listarTodos():
+    relatorioGeral(repository.listar())
