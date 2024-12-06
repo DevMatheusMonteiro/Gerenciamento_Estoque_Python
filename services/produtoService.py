@@ -2,28 +2,26 @@ from repositories.produtoRepository import ProdutoRepository
 from model.produto import Produto
 import util
 class ProdutoService:
-    def validarCodigo(codigo: int):
-        return not ProdutoRepository.buscarPorCodigo(codigo)
-    def validarQuantidade(quantidade: int):
-        return quantidade >= 0
-    def validarPrecoVenda(precoVenda: float, custoItem: float):
-        return precoVenda >= custoItem
+    def __init__(self, ProdutoRepository:ProdutoRepository):
+        self.produtoRepository = ProdutoRepository
+    def validarCodigo(self,codigo: int):
+        return not self.produtoRepository.buscarPorCodigo(codigo)
     def entrarCodigo(self):
         while True:
             codigo = int(util.entrarNumero("Entre com o código do produto: "))
             if self.validarCodigo(codigo):
                 return codigo
             print("Erro: código já cadastrado!")
-    def entrarQuantidade(self):
+    def entrarQuantidade():
         while True:
             quantidade = int(util.entrarNumero("Entre com a quantidade do produto: "))
-            if self.validarQuantidade(quantidade):
+            if quantidade >= 0:
                 return quantidade
-            print("Erro: quantidade não pode ser negativa")
+            print("Erro: quantidade não pode ser negativa!")
     def entrarPrecoVenda(self,custoItem):
         while True:
             precoVenda = util.entrarNumero("Entre com o preço de venda do produto: ")
-            if self.validarPrecoVenda(precoVenda, custoItem):
+            if precoVenda >= custoItem:
                 return precoVenda
             print("Erro: preço de venda não pode ser menor que o custo do item!")
     def relatorioGeral(produtos: list[Produto]):
@@ -35,18 +33,19 @@ class ProdutoService:
             else:
                 print(str(produto) + "\n************")
     def criar(self):
-        descricao = util.entrarTexto("Entre com a descrição do produto: ").strip()
-        codigo = self.entrarCodigo()
-        quantidade = self.entrarQuantidade()
-        custoItem = util.entrarNumero("Entre com o custo do produto: ")
-        precoVenda = self.entrarPrecoVenda(custoItem)
-        ProdutoRepository.criar(Produto(descricao,codigo,quantidade,custoItem,precoVenda))
+        produto = Produto()
+        produto.setDescricao(descricao=util.entrarTexto("Entre com a descrição do produto: ").strip())
+        produto.setCodigo(self.entrarCodigo())
+        produto.setQuantidade(self.entrarQuantidade())
+        produto.setCustoItem(util.entrarNumero("Entre com o custo do produto: "))
+        produto.setPrecoVenda(self.entrarPrecoVenda(custoItem))
+        ProdutoRepository.criar(produto)
     def listarTodos(self):
-        self.relatorioGeral(ProdutoRepository.listar())
+        self.relatorioGeral(self.produtoRepository.listar())
     def buscarPorDescricao(self,descricao: str):
-        self.relatorioGeral(ProdutoRepository.buscarPorDescricao(descricao))
-    def buscarPorCodigo(codigo: int):
-        produto = ProdutoRepository.buscarPorCodigo(codigo)
+        self.relatorioGeral(self.produtoRepository.buscarPorDescricao(descricao))
+    def buscarPorCodigo(self,codigo: int):
+        produto = self.produtoRepository.buscarPorCodigo(codigo)
         if not produto:
             return print("Nenhum produto encontrado!")
         print(produto)

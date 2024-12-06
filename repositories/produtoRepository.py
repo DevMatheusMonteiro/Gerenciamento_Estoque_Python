@@ -1,6 +1,8 @@
 from mock import estoque_lista
 from model.produto import Produto
 class ProdutoRepository:
+    def __init__(self):
+        pass
     def criar(produto: Produto):
         estoque_lista.append(produto)
     def listar():
