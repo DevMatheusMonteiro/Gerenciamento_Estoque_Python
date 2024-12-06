@@ -2,8 +2,8 @@ from repositories.produtoRepository import ProdutoRepository
 from model.produto import Produto
 import util
 class ProdutoService:
-    def __init__(self, ProdutoRepository:ProdutoRepository):
-        self.produtoRepository = ProdutoRepository
+    def __init__(self):
+        self.produtoRepository = ProdutoRepository()
     def validarCodigo(self,codigo: int):
         return not self.produtoRepository.buscarPorCodigo(codigo)
     def entrarCodigo(self):
