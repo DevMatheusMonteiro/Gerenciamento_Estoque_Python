@@ -1,5 +1,4 @@
 from model.produto import Produto
-
 def lerCSV(string: str):
     return [linha for linha in string.split("#")]
 def criarListaEstoque(linhas: list[str]):
