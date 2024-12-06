@@ -1,15 +1,17 @@
-def lerCSV(string):
+from model.produto import Produto
+
+def lerCSV(string: str):
     return [linha for linha in string.split("#")]
-def criarListaEstoque(linhas):
-    return [{"descricao": produto.split(";")[0], "codigo": int(produto.split(";")[1]), "quantidade": int(produto.split(";")[2]), "custoItem": float(produto.split(";")[3]),"precoVenda": float(produto.split(";")[4])} for produto in linhas]
-def entrarNumero(mensagem):
+def criarListaEstoque(linhas: list[str]):
+    return [Produto(produto.split(";")[0],int(produto.split(";")[1]),int(produto.split(";")[2]),float(produto.split(";")[3]),float(produto.split(";")[4])) for produto in linhas]
+def entrarNumero(mensagem: str):
     while True:
         try:
             numero = float(input(mensagem))
             return numero
         except ValueError:
             print("Erro: número inválido!")
-def entrarTexto(mensagem):
+def entrarTexto(mensagem: str):
     while True:
         texto = input(mensagem)
         if not (texto == None or texto.strip() == ""):
