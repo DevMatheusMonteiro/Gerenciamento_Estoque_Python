@@ -1,3 +1,3 @@
-from estoque import estoque_lista
-import service
-service.filtrarPorLimiteDeQuantidade()
+from mock import estoque_lista
+from services.produtoService import ProdutoService
+ProdutoService.buscarPorCodigo(101)
