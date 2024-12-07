@@ -12,6 +12,8 @@ class ProdutoRepository:
         return list(filter(lambda produto: produto.descricao.lower().find(descricao.lower()) != -1, self.estoque))
     def ordenarPorQuantidade(self,produtos: list[Produto], decrescente:bool=False):
         return sorted(produtos,key=lambda produto:produto.quantidade,reverse = decrescente)
+    def consultarProdutosEsgotados(self):
+        return list(filter(lambda produto:produto.quantidade == 0,self.estoque))
     def filtrarPorLimiteDeQuantidade(self, quantidade: int):
         return list(filter(lambda produto:produto.quantidade <= quantidade,self.estoque))
     def remover(self, produto: Produto):

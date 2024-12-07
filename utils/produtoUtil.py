@@ -99,7 +99,7 @@ class ProdutoUtil:
         ProdutoUtil.produtoService.relatorioGeral(ProdutoUtil.produtoService.ordenarPorQuantidade(produtos, decrescente == 2))
     @staticmethod
     def menuPesquisa():
-        escolha = int((GenericUtil.entrarNumero("1 - Listar todos\n2 - Buscar por descrição do produto\n3 - Buscar por código\n4 - Filtrar por limite de quantidade\n0 - Sair\nEscolha: ")))
+        escolha = int((GenericUtil.entrarNumero("1 - Listar todos\n2 - Buscar por descrição do produto\n3 - Buscar por código\n4 - Filtrar por limite de quantidade\n5 - Consultar produtos esgotados\n0 - Sair\nEscolha: ")))
         while escolha != 0:
             if escolha == 1:
                 ProdutoUtil.ordenarPorQuantidade(ProdutoUtil.produtoService.listarTodos())
@@ -113,6 +113,8 @@ class ProdutoUtil:
                     print("Nenhum produto encontrado")
             elif escolha == 4:
                 ProdutoUtil.ordenarPorQuantidade(ProdutoUtil.produtoService.filtrarPorLimiteDeQuantidade(int(GenericUtil.entrarNumero("Entre com o limite de quantidade: "))))
+            elif escolha == 5:
+                ProdutoUtil.produtoService.relatorioGeral(ProdutoUtil.produtoService.consultarProdutosEsgotados())
             elif escolha == 0:
                 pass
             else:

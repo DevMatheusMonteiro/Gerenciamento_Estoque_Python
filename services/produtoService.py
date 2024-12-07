@@ -28,6 +28,8 @@ class ProdutoService:
         return self.produtoRepository.buscarPorDescricao(descricao)
     def filtrarPorLimiteDeQuantidade(self,quantidade:int=20):
         return self.produtoRepository.filtrarPorLimiteDeQuantidade(quantidade)
+    def consultarProdutosEsgotados(self):
+        return self.produtoRepository.consultarProdutosEsgotados()
     def ordenarPorQuantidade(self, produtos: list[Produto], decrescente:bool=False):
         return self.produtoRepository.ordenarPorQuantidade(produtos, decrescente)
     def buscarPorCodigo(self,codigo: int):
