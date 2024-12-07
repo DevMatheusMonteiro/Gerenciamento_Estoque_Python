@@ -1,7 +1,6 @@
-from mock import estoque_lista
-from services.produtoService import ProdutoService
 from repositories.produtoRepository import ProdutoRepository
-from model.produto import Produto
-produtoService = ProdutoService(ProdutoRepository)
-# produtoService.listarTodos()
-produtoService.criar()
+from utils.produtoUtil import ProdutoUtil
+from services.produtoService import ProdutoService
+# print(ProdutoUtil.criar())
+produtoService = ProdutoService()
+produtoService.buscarPorDescricao("Notebook")
