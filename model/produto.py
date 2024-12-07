@@ -18,5 +18,7 @@ class Produto:
         self.precoVenda = precoVenda
     def calcularValorTotal(self):
         return self.precoVenda * self.quantidade
+    def calcularLucroPresumido(self):
+        return (self.precoVenda - self.custoItem) * self.quantidade
     def __str__(self):
-        return f"Código: {self.codigo}\nDescrição: {self.descricao}\nQuantidade: {self.quantidade}\nCusto do Item: {self.custoItem}\nPreço de Venda: {self.precoVenda}\nValor Total: {self.calcularValorTotal()}"
+        return f"Código: {self.codigo}\nDescrição: {self.descricao}\nQuantidade: {self.quantidade}\nCusto do Item: {self.custoItem}\nPreço de Venda: {self.precoVenda}\nValor Total: {self.calcularValorTotal()}\nLucro presumido: {self.calcularLucroPresumido()}"
