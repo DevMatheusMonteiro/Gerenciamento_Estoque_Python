@@ -1,30 +1,9 @@
 from repositories.produtoRepository import ProdutoRepository
 from model.produto import Produto
-import util
+from exceptions.produtoExceptions import ProdutoException
 class ProdutoService:
-    def __init__(self):
-        self.produtoRepository = ProdutoRepository()
-    def validarCodigo(self,codigo: int):
-        return not self.produtoRepository.buscarPorCodigo(codigo)
-    def entrarCodigo(self):
-        while True:
-            codigo = int(util.entrarNumero("Entre com o código do produto: "))
-            if self.validarCodigo(codigo):
-                return codigo
-            print("Erro: código já cadastrado!")
-    def entrarQuantidade():
-        while True:
-            quantidade = int(util.entrarNumero("Entre com a quantidade do produto: "))
-            if quantidade >= 0:
-                return quantidade
-            print("Erro: quantidade não pode ser negativa!")
-    def entrarPrecoVenda(self,custoItem):
-        while True:
-            precoVenda = util.entrarNumero("Entre com o preço de venda do produto: ")
-            if precoVenda >= custoItem:
-                return precoVenda
-            print("Erro: preço de venda não pode ser menor que o custo do item!")
-    def relatorioGeral(produtos: list[Produto]):
+    produtoRepository = ProdutoRepository()
+    def relatorioGeral(self, produtos: list[Produto]):
         if not produtos:
             return print("Nenhum produto encontrado!")
         for i,produto in enumerate(produtos):
@@ -32,14 +11,17 @@ class ProdutoService:
                 print(str(produto))
             else:
                 print(str(produto) + "\n************")
-    def criar(self):
-        produto = Produto()
-        produto.setDescricao(descricao=util.entrarTexto("Entre com a descrição do produto: ").strip())
-        produto.setCodigo(self.entrarCodigo())
-        produto.setQuantidade(self.entrarQuantidade())
-        produto.setCustoItem(util.entrarNumero("Entre com o custo do produto: "))
-        produto.setPrecoVenda(self.entrarPrecoVenda(custoItem))
-        ProdutoRepository.criar(produto)
+    def criar(self, produto: Produto):
+        if produto.codigo < 0:
+            raise ProdutoException("Erro: código do produto não por ser menor que 0.")
+        if self.produtoRepository.buscarPorCodigo(produto.codigo):
+            raise ProdutoException("Erro: código já cadastrado.")
+        if produto.quantidade < 0:
+            raise ProdutoException("Erro: quantidade do produto não por ser menor que 0.")
+        if produto.precoVenda < produto.custoItem:
+            raise ProdutoException("Erro: preço de venda não pode ser menor que o custo do item.")
+        self.produtoRepository.criar(produto)
+        return produto
     def listarTodos(self):
         self.relatorioGeral(self.produtoRepository.listar())
     def buscarPorDescricao(self,descricao: str):
@@ -47,7 +29,29 @@ class ProdutoService:
     def buscarPorCodigo(self,codigo: int):
         produto = self.produtoRepository.buscarPorCodigo(codigo)
         if not produto:
-            return print("Nenhum produto encontrado!")
+            return print("Nenhum produto encontrado.")
         print(produto)
     def filtrarPorLimiteDeQuantidade(self,quantidade:int=20):
         self.relatorioGeral(ProdutoRepository.filtrarPorLimiteDeQuantidade(quantidade))
+    def aumentarQuantidade(self, codigo: int):
+        produto = self.produtoRepository.buscarPorCodigo(codigo)
+        if produto:
+            self.produtoRepository.aumentarQuantidade(produto)
+            return produto
+        print("Nenhum produto encontrado!")
+    def diminuirQuantidade(self, codigo: int):
+        produto = self.produtoRepository.buscarPorCodigo(codigo)
+        if not produto:
+            return print("Nenhum produto encontrado.")
+        if produto.quantidade == 0:
+            return print("Não há nenhum produto desse no estoque.")
+        self.produtoRepository.diminuirQuantidade(produto)
+        return produto
+    def atualizarPreco(self, codigo: int, precoVenda: float):
+        produto = self.produtoRepository.buscarPorCodigo(codigo)
+        if not produto:
+            return print("Nenhum produto encontrado.")
+        if precoVenda < produto.custoItem:
+            raise ProdutoException("Erro: preço de venda não pode ser menor que o custo do item.")
+        self.produtoRepository.atualizarPreco(produto,precoVenda)
+        return produto
