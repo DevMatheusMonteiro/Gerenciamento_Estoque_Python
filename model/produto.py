@@ -21,4 +21,5 @@ class Produto:
     def calcularLucroPresumido(self):
         return (self.precoVenda - self.custoItem) * self.quantidade
     def __str__(self):
-        return f"Código: {self.codigo}\nDescrição: {self.descricao}\nQuantidade: {self.quantidade}\nCusto do Item: {self.custoItem}\nPreço de Venda: {self.precoVenda}\nValor Total: {self.calcularValorTotal()}\nLucro presumido: {self.calcularLucroPresumido()}"
+        from utils.produtoUtil import ProdutoUtil
+        return f"Código: {self.codigo}\nDescrição: {self.descricao}\nQuantidade: {self.quantidade}\nCusto do Item: {ProdutoUtil.formatarValorMonetario(self.custoItem)}\nPreço de Venda: {ProdutoUtil.formatarValorMonetario(self.precoVenda)}\nValor Total: {ProdutoUtil.formatarValorMonetario(self.calcularValorTotal())}\nLucro presumido: {ProdutoUtil.formatarValorMonetario(self.calcularLucroPresumido())}"
