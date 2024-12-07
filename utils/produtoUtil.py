@@ -2,8 +2,13 @@ from model.produto import Produto
 from services.produtoService import ProdutoService
 from utils.genericUtil import GenericUtil
 from exceptions.produtoExceptions import ProdutoException
+import locale
+locale.setlocale(locale.LC_ALL,'pt_BR.UTF-8')
 class ProdutoUtil:
     produtoService = ProdutoService()
+    @staticmethod
+    def formatarValorMonetario(valor: float):
+        return locale.currency(valor,grouping=True)
     @staticmethod
     def criar():
         while True:
@@ -24,7 +29,7 @@ class ProdutoUtil:
                 ProdutoUtil.produtoService.buscarPorCodigo(codigo)
                 preco = GenericUtil.entrarNumero("Entre com o novo preço de venda do produto: ")
                 ProdutoUtil.produtoService.atualizarPreco(codigo,preco)
-                print("Preço de venda atualizado com sucesso!")
+                return print("Preço de venda atualizado com sucesso!")
             except ProdutoException as e:
                 print(e)
     @staticmethod
@@ -63,7 +68,7 @@ class ProdutoUtil:
             print(e)
     @staticmethod
     def menuAtualizar():
-        escolha = int(GenericUtil.entrarNumero("1 - Atualizar preço de venda\n2 - Aumentar quantidade no estoque\n3 - Diminuir quantidade no estoque\n0 - Sair"))
+        escolha = int(GenericUtil.entrarNumero("1 - Atualizar preço de venda\n2 - Aumentar quantidade no estoque\n3 - Diminuir quantidade no estoque\n0 - Sair\nEscolha: "))
         while escolha != 0:
             if escolha == 1:
                 ProdutoUtil.atualizarPreco()
@@ -75,7 +80,8 @@ class ProdutoUtil:
                 pass
             else:
                 print("Escolha inválida.")
-        escolha = int(GenericUtil.entrarNumero("1 - Atualizar preço de venda\n2 - Aumentar quantidade no estoque\n3 - Diminuir quantidade no estoque\n0 - Sair"))
+            escolha = int(GenericUtil.entrarNumero("1 - Atualizar preço de venda\n2 - Aumentar quantidade no estoque\n3 - Diminuir quantidade no estoque\n0 - Sair\nEscolha: "))
+        print("Saindo da atualização...\n")
     @staticmethod
     def ordenarPorQuantidade(produtos: list[Produto]):
         escolha = int(GenericUtil.entrarNumero("Deseja ordenar os produtos por quantidade (1 - Sim | 0 - Não)? "))
@@ -93,24 +99,26 @@ class ProdutoUtil:
         ProdutoUtil.produtoService.relatorioGeral(ProdutoUtil.produtoService.ordenarPorQuantidade(produtos, decrescente == 2))
     @staticmethod
     def menuPesquisa():
-        escolha = int((GenericUtil.entrarNumero("1 - Listar todos\n2 - Buscar por descrição do produto\n3 - Buscar por código\n4 - Filtrar por limite de quantidade\n0 - Sair")))
-        while True:
+        escolha = int((GenericUtil.entrarNumero("1 - Listar todos\n2 - Buscar por descrição do produto\n3 - Buscar por código\n4 - Filtrar por limite de quantidade\n0 - Sair\nEscolha: ")))
+        while escolha != 0:
             if escolha == 1:
                 ProdutoUtil.ordenarPorQuantidade(ProdutoUtil.produtoService.listarTodos())
             elif escolha == 2:
                 ProdutoUtil.ordenarPorQuantidade(ProdutoUtil.produtoService.buscarPorDescricao(GenericUtil.entrarTexto("Entre com a descrição: ")))
             elif escolha == 3:
-                produto = ProdutoUtil.produtoService.buscarPorCodigo(int(GenericUtil.entrarNumero("Entre com o código: ")))
-                if not produto:
-                    print("Nenhum produto encontrado")
-                else:
+                try:
+                    produto = ProdutoUtil.produtoService.buscarPorCodigo(int(GenericUtil.entrarNumero("Entre com o código: ")))
                     print(produto)
+                except ProdutoException:
+                    print("Nenhum produto encontrado")
             elif escolha == 4:
                 ProdutoUtil.ordenarPorQuantidade(ProdutoUtil.produtoService.filtrarPorLimiteDeQuantidade(int(GenericUtil.entrarNumero("Entre com o limite de quantidade: "))))
             elif escolha == 0:
                 pass
             else:
                 print("Escolha inválida.")
+            escolha = int((GenericUtil.entrarNumero("1 - Listar todos\n2 - Buscar por descrição do produto\n3 - Buscar por código\n4 - Filtrar por limite de quantidade\n0 - Sair\nEscolha: ")))
+        print("Saindo da pesquisa...\n")
     @staticmethod
     def remover():
         while True:
@@ -118,6 +126,25 @@ class ProdutoUtil:
                 codigo = int(GenericUtil.entrarNumero("Entre com o código do produto que deseja remover: "))
                 ProdutoUtil.produtoService.buscarPorCodigo(codigo)
                 ProdutoUtil.produtoService.remover(codigo)
-                print("Produto removido com sucesso!")
+                return print("Produto removido com sucesso!")
             except ProdutoException as e:
                 print(e)
+    def menu():
+        escolha = int(GenericUtil.entrarNumero("1 - Criar novo produto\n2 - Atualizar produto\n3 - Remover produto\n4 - Buscar produtos\n5 - Calcular total de lucro presumido em estoque\n0 - Encerrar\nEscolha: "))
+        while escolha != 0:
+            if escolha == 1:
+                ProdutoUtil.criar()
+            elif escolha == 2:
+                ProdutoUtil.menuAtualizar()
+            elif escolha == 3:
+                ProdutoUtil.remover()
+            elif escolha == 4:
+                ProdutoUtil.menuPesquisa()
+            elif escolha == 5:
+                print(f"Total de lucro presumido: {ProdutoUtil.formatarValorMonetario(ProdutoUtil.produtoService.totalDeLucroPresumidoEmEstoque())}")
+            elif escolha == 0:
+                pass
+            else:
+                print("Escolha inválida.")
+            escolha = int(GenericUtil.entrarNumero("1 - Criar novo produto\n2 - Atualizar produto\n3 - Remover produto\n4 - Buscar produtos\n5 - Calcular total de lucro presumido em estoque\n0 - Encerrar\nEscolha: "))
+        print("Encerrado...")
