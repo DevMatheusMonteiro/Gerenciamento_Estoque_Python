@@ -23,16 +23,18 @@ class ProdutoService:
         self.produtoRepository.criar(produto)
         return produto
     def listarTodos(self):
-        self.relatorioGeral(self.produtoRepository.listar())
+        return self.produtoRepository.listar()
     def buscarPorDescricao(self,descricao: str):
-        self.relatorioGeral(self.produtoRepository.buscarPorDescricao(descricao))
+        return self.produtoRepository.buscarPorDescricao(descricao)
+    def filtrarPorLimiteDeQuantidade(self,quantidade:int=20):
+        return self.produtoRepository.filtrarPorLimiteDeQuantidade(quantidade)
+    def ordenarPorQuantidade(self, produtos: list[Produto], decrescente:bool=False):
+        return self.produtoRepository.ordenarPorQuantidade(produtos, decrescente)
     def buscarPorCodigo(self,codigo: int):
         produto = self.produtoRepository.buscarPorCodigo(codigo)
         if not produto:
-            return print("Nenhum produto encontrado.")
-        print(produto)
-    def filtrarPorLimiteDeQuantidade(self,quantidade:int=20):
-        self.relatorioGeral(ProdutoRepository.filtrarPorLimiteDeQuantidade(quantidade))
+            raise ProdutoException("Erro: nenhum produto encontrado.")
+        return produto
     def aumentarQuantidade(self, codigo: int):
         produto = self.produtoRepository.buscarPorCodigo(codigo)
         if produto:
@@ -44,7 +46,7 @@ class ProdutoService:
         if not produto:
             return print("Nenhum produto encontrado.")
         if produto.quantidade == 0:
-            return print("Não há nenhum produto desse no estoque.")
+            return print("Produto esgotado.")
         self.produtoRepository.diminuirQuantidade(produto)
         return produto
     def atualizarPreco(self, codigo: int, precoVenda: float):
@@ -55,3 +57,11 @@ class ProdutoService:
             raise ProdutoException("Erro: preço de venda não pode ser menor que o custo do item.")
         self.produtoRepository.atualizarPreco(produto,precoVenda)
         return produto
+    def remover(self, codigo: int):
+        produto = self.produtoRepository.buscarPorCodigo(codigo)
+        if produto:
+            self.produtoRepository.remover(produto)
+            return produto
+        return None
+    def totalDeLucroPresumidoEmEstoque(self):
+        return sum([produto.calcularLucroPresumido() for produto in self.listarTodos()])
