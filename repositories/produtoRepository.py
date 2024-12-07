@@ -1,8 +1,7 @@
 from mock import Mock
 from model.produto import Produto
 class ProdutoRepository:
-    def __init__(self):
-        self.estoque = Mock.criarListaEstoque()
+    estoque = Mock.criarListaEstoque()
     def criar(self,produto: Produto):
         self.estoque.append(produto)
     def listar(self):
@@ -14,7 +13,7 @@ class ProdutoRepository:
     def ordenarPorQuantidade(self,produtos: list[Produto], decrescente:bool=False):
         return sorted(produtos,key=lambda produto:produto.quantidade,reverse = decrescente)
     def filtrarPorLimiteDeQuantidade(self, quantidade: int):
-        return list(filter(lambda produto:produto.quantidade < quantidade,self.estoque))
+        return list(filter(lambda produto:produto.quantidade <= quantidade,self.estoque))
     def remover(self, produto: Produto):
         self.estoque.remove(produto)
     def aumentarQuantidade(self, produto: Produto):
