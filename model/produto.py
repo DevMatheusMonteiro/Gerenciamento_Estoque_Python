@@ -15,8 +15,7 @@ class Produto:
     def setCustoItem(self, custoItem: float):
         self.custoItem = custoItem
     def setPrecoVenda(self, precoVenda: float):
-        if precoVenda >= self.custoItem:
-            self.precoVenda = precoVenda
+        self.precoVenda = precoVenda
     def calcularValorTotal(self):
         return self.precoVenda * self.quantidade
     def __str__(self):
