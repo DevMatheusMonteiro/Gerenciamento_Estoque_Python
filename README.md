@@ -2,13 +2,14 @@
 
 Este projeto implementa um sistema de gestão de estoque, com funcionalidades para adicionar, listar, atualizar, remover, e manipular o estoque de itens, como produtos de informática (notebooks, mouses, teclados, etc.). O sistema é organizado com as classes de Produto, ProdutoService, ProdutoRepository, e outras utilitárias, proporcionando uma interface simples para o gerenciamento de um estoque.
 
-## Tecnologias Utilizadas
+# Tecnologias Utilizadas
 
-Python 3.x
-Estrutura baseada em POO (Programação Orientada a Objetos)
-Arquitetura: MVC (Model-View-Controller)
-Exceções customizadas para validação de dados
-Funcionalidades
+- Python 3.x
+- Estrutura baseada em POO (Programação Orientada a Objetos)
+- Arquitetura: MVC (Model-View-Controller)
+- Exceções customizadas para validação de dados
+
+# Funcionalidades
 
 ## Produto
 
