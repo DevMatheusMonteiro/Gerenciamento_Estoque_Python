@@ -5,12 +5,35 @@ from exceptions.produtoExceptions import ProdutoException
 import locale
 locale.setlocale(locale.LC_ALL,'pt_BR.UTF-8')
 class ProdutoUtil:
+    """
+    Classe utilitária para operações relacionadas a produtos.
+
+    Atua como camada intermediária entre o usuário e o serviço de produto,
+    oferecendo métodos estáticos para criação, manipulação, pesquisa e exibição de relatórios.
+    """
     produtoService = ProdutoService()
     @staticmethod
     def formatarValorMonetario(valor: float):
+        """
+        Formata um valor numérico como moeda no padrão brasileiro.
+
+        Args:
+            valor (float): O valor a ser formatado.
+
+        Returns:
+            str: O valor formatado em reais (R$).
+        """
         return locale.currency(valor,grouping=True)
     @staticmethod
     def criar():
+        """
+        Cria um novo produto solicitando os dados ao usuário via terminal.
+
+        Valida as entradas e lida com exceções de produto.
+
+        Returns:
+            Produto: O produto criado.
+        """
         while True:
             try:
                 descricao = GenericUtil.entrarTexto("Entre com a descrição do produto: ").strip()
@@ -23,6 +46,14 @@ class ProdutoUtil:
                 print(e)
     @staticmethod
     def atualizarPreco():
+        """
+        Atualiza o preço de venda de um produto existente.
+
+        Solicita ao usuário o código do produto e o novo preço, validando as entradas.
+
+        Raises:
+            ProdutoException: Caso ocorra erro na validação do produto.
+        """
         while True:
             try:
                 codigo = int(GenericUtil.entrarNumero("Entre com codigo do produto que deseja atualizar o preço: "))
@@ -34,6 +65,15 @@ class ProdutoUtil:
                 print(e)
     @staticmethod
     def definirQuantidade(mensagem):
+        """
+        Solicita uma quantidade ao usuário, garantindo que seja maior que zero.
+
+        Args:
+            mensagem (str): Mensagem exibida ao usuário.
+
+        Returns:
+            int: A quantidade válida fornecida pelo usuário.
+        """
         quantidade = int(GenericUtil.entrarNumero((mensagem)))
         while quantidade < 1:
             if quantidade < 1:
@@ -42,6 +82,11 @@ class ProdutoUtil:
         return quantidade
     @staticmethod
     def aumentarQuantidade():
+        """
+        Aumenta a quantidade de um produto no estoque.
+
+        Solicita o código do produto e o número de vezes que a quantidade deve ser aumentada.
+        """
         try:
             codigo = int(GenericUtil.entrarNumero("Entre com codigo do produto que deseja aumentar a quantidade: "))
             ProdutoUtil.produtoService.buscarPorCodigo(codigo)
@@ -53,6 +98,11 @@ class ProdutoUtil:
             print(e)
     @staticmethod
     def diminuirQuantidade():
+        """
+        Diminui a quantidade de um produto no estoque.
+
+        Não diminui a quantidade se o produto já estiver esgotado.
+        """
         try:
             codigo = int(GenericUtil.entrarNumero("Entre com codigo do produto que deseja diminuir a quantidade: "))
             ProdutoUtil.produtoService.buscarPorCodigo(codigo)
@@ -68,6 +118,9 @@ class ProdutoUtil:
             print(e)
     @staticmethod
     def menuAtualizar():
+        """
+        Exibe o menu para atualização de produtos (preço e quantidade) e processa as opções do usuário.
+        """
         escolha = int(GenericUtil.entrarNumero("1 - Atualizar preço de venda\n2 - Aumentar quantidade no estoque\n3 - Diminuir quantidade no estoque\n0 - Sair\nEscolha: "))
         while escolha != 0:
             if escolha == 1:
@@ -84,6 +137,12 @@ class ProdutoUtil:
         print("Saindo da atualização...\n")
     @staticmethod
     def ordenarPorQuantidade(produtos: list[Produto]):
+        """
+        Ordena e exibe os produtos com base na quantidade.
+
+        Args:
+            produtos (list[Produto]): Lista de produtos a serem ordenados.
+        """
         escolha = int(GenericUtil.entrarNumero("Deseja ordenar os produtos por quantidade (1 - Sim | 0 - Não)? "))
         while escolha != 1 and escolha != 0:
             if escolha != 1 and escolha != 0:
@@ -99,6 +158,9 @@ class ProdutoUtil:
         ProdutoUtil.produtoService.relatorioGeral(ProdutoUtil.produtoService.ordenarPorQuantidade(produtos, decrescente == 2))
     @staticmethod
     def menuPesquisa():
+        """
+        Exibe o menu de pesquisa e filtro de produtos e processa as opções do usuário.
+        """
         escolha = int((GenericUtil.entrarNumero("1 - Listar todos\n2 - Buscar por descrição do produto\n3 - Buscar por código\n4 - Filtrar por limite de quantidade\n5 - Consultar produtos esgotados\n0 - Sair\nEscolha: ")))
         while escolha != 0:
             if escolha == 1:
@@ -123,6 +185,9 @@ class ProdutoUtil:
         print("Saindo da pesquisa...\n")
     @staticmethod
     def remover():
+        """
+        Remove um produto do estoque pelo código fornecido pelo usuário.
+        """
         while True:
             try:
                 codigo = int(GenericUtil.entrarNumero("Entre com o código do produto que deseja remover: "))
@@ -132,6 +197,9 @@ class ProdutoUtil:
             except ProdutoException as e:
                 print(e)
     def menu():
+        """
+        Exibe o menu principal do sistema de gerenciamento de produtos e processa as opções do usuário.
+        """
         escolha = int(GenericUtil.entrarNumero("1 - Criar novo produto\n2 - Atualizar produto\n3 - Remover produto\n4 - Buscar produtos\n5 - Calcular total de lucro presumido em estoque\n0 - Encerrar\nEscolha: "))
         while escolha != 0:
             if escolha == 1:
