@@ -163,7 +163,7 @@ Exemplo de uso:
 
 ```python
 try:
-produto = ProdutoUtil.criar()
+    produto = ProdutoUtil.criar()
 except ProdutoException as e:
-print(e)
+    print(e)
 ```
